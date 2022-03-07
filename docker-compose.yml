@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+    time:
+        build: ./services/time
+        restart: unless-stopped
+        environment:
+            PORT: 5000
+
+    weather:
+        build: ./services/weather
+        restart: unless-stopped
+        environment:
+            PORT: 5001
+
+    gateway:
+        build: ./services/gateway
+        restart: unless-stopped
+        environment:
+            PORT: 5002
+
+    caddy:
+        image: caddy:alpine
+        restart: unless-stopped
+        ports:
+            - '2019:2019'
+            - '80:80'
+            - '443:443'
+        volumes:
+            - ./site:/srv
+            - ./gateway/data:/data
+            - ./gateway/logs:/var/log/caddy
+            - ./gateway/config:/config
+            - ./gateway/Caddyfile:/etc/caddy/Caddyfile
+# volumes:
+#     caddy_data:
+#         external: true
+#     caddy_config:

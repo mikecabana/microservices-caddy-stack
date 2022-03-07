@@ -1,0 +1,35 @@
+{
+    # admin {
+    #     origins *
+    # }
+
+    # email mikecabana@outlook.com
+
+    # Optional staging lets encrypt for testing. Comment out for production.
+    # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+
+    # local_certs
+
+    # log {
+    #     output file /var/log/caddy/caddy.log
+    # }
+
+    debug
+}
+
+localhost {
+
+    file_server
+
+    handle_path /api/time* {
+        reverse_proxy time:5000
+    }
+
+    handle_path /api/weather* {
+        reverse_proxy weather:5001
+    }
+
+    handle_path /api/gateway* {
+        reverse_proxy gateway:5002
+    }
+}
